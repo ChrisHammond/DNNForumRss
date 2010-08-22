@@ -1,0 +1,22 @@
+﻿
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}[{objectQualifier}Christoc_GetForumPosts]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}[{objectQualifier}Christoc_GetForumPosts]
+GO
+
+CREATE procedure {databaseOwner}[{objectQualifier}Christoc_GetForumPosts]
+	@ForumId int
+	, @NumberOfPosts int
+as
+
+select 
+ps.Subject, ps.Body, u.DisplayName, ps.CreatedDate, ps.ForumID, ps.ThreadID
+from 
+
+{objectQualifier}Forum_vw_PostSearch ps
+join {objectQualifier}vw_Users u on (ps.UserID = u.UserID)
+
+where ForumID=@ForumId and ParentPostID =0
+
+order by ps.CreatedDate desc
+
+GO
